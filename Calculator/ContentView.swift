@@ -14,11 +14,11 @@ struct ContentView: View {
     // 현재 화면에 표시될 값
     @State var display = "0"
     // 첫 번째 피연산자
-    @State var operand1 = ""
+    @State var num1 = ""
     // 두 번째 피연산자
-    @State var operand2 = ""
+    @State var num2 = ""
     // 현재 선택된 연산자
-    @State var operation = ""
+    @State var number = ""
     // 화면 초기화 여부
     @State var clearDisplay = true
     
@@ -85,23 +85,23 @@ struct ContentView: View {
         case "AC":
             // "AC" 버튼: 화면 초기화
             display = "0"
-            operand1 = ""
-            operand2 = ""
-            operation = ""
+            num1 = ""
+            num2 = ""
+            number = ""
             clearDisplay = true
         case "%", "X", "-", "+":
             // 연산자 버튼: 피연산자 설정
-            operation = button
-            operand1 = display
+            number = button
+            num1 = display
             clearDisplay = true
         case "=":
             // "=" 버튼: 계산 수행
-            operand2 = display
+            num2 = display
             let result = calculate()
             display = result
-            operand1 = ""
-            operand2 = ""
-            operation = ""
+            num1 = ""
+            num2 = ""
+            number = ""
             clearDisplay = true
         default:
             // 숫자나 "." 버튼: 현재 값에 추가
@@ -118,8 +118,10 @@ struct ContentView: View {
     func calculate() -> String {
         // 피연산자와 연산자 추출
         // 올바른 숫자 형식으로 변환하여 계산 수행
-        if let num1 = Double(operand1), let num2 = Double(operand2) {
-            switch operation {
+        if let num1 = Double(num1), let num2 = Double(num2) {
+            switch number {
+            case "%":
+                return String(num1 / num2)
             case "X":
                 return String(num1 * num2)
             case "-":
