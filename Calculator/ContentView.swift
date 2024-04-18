@@ -20,10 +20,22 @@ enum CalcBtn: String {
     case zero = "0"
     case add = "+"
     case subtract = "-"
-    case divide = "÷"
-    case multiply = "*"
+    case divide = "/"
+    case multiply = "X"
     case equal = "="
+    case decimal = "."
     case clear = "C"
+    
+    var buttonColor: Color {
+        switch self {
+        case .add, .subtract, .multiply, .divide, .equal:
+            return .green
+        case .clear:
+            return .red
+        default:
+            return .gray
+        }
+    }
 }
 
 enum Operator {
@@ -34,18 +46,24 @@ struct ContentView: View {
     @State var value = "0"
     @State var currentOperation: Operator = .none
     @State var runningNumber = 0
+    @State var temp:[String] = []
     
     let btns: [[CalcBtn]] = [
-        [, "8", "9", "/"],
-        ["4", "5", "6", "*"],
-        ["1", "2", "3", "-"],
-        [".", "0", "c", "+"],
-        ["="],
+        [.seven, .eight, .nine, .divide],
+        [.four, .five, .six, .multiply],
+        [.one, .two, .three, .subtract],
+        [.decimal, .zero, .clear, .add],
+        [.equal],
     ]
     
     var body: some View {
         VStack {
+            List(temp, id: \.self) { temp in
+                
+                Text(temp)
+            }
             HStack{
+           
                 Spacer()
                 Text(value)
                     .bold()
@@ -61,6 +79,13 @@ struct ContentView: View {
                         }, label: {
                             Text(item.rawValue)
                                 .font(.system(size: 32))
+                                .frame(
+                                    width: self.buttonWidth(item: item),
+                                    height: self.buttonHeight()
+                                )
+                                .background(item.buttonColor)
+                                .foregroundColor(.white)
+                                .cornerRadius(self.buttonWidth(item: item)/2)
                         })
                         
                     }
@@ -95,9 +120,13 @@ struct ContentView: View {
                 let currentValue = Int(self.value) ?? 0
                 switch self.currentOperation {
                 case .add: self.value = "\(runningValue + currentValue)"
+                    temp.append(" \(runningValue) + \(currentValue) = \(runningValue + currentValue)")
                 case .sub: self.value = "\(runningValue - currentValue)"
+                    temp.append(" \(runningValue) - \(currentValue) = \(runningValue + currentValue)")
                 case .multi: self.value = "\(runningValue * currentValue)"
+                    temp.append(" \(runningValue) X \(currentValue) = \(runningValue + currentValue)")
                 case .div: self.value = "\(runningValue / currentValue)"
+                    temp.append(" \(runningValue) ÷ \(currentValue) = \(runningValue + currentValue)")
                 case .none:
                     break
                 }
@@ -107,6 +136,7 @@ struct ContentView: View {
             }
         case .clear:
             self.value = "0"
+            self.temp = []
             break
         default:
             let num = btn.rawValue
@@ -118,9 +148,18 @@ struct ContentView: View {
             }
         }
     }
+    
+    func buttonWidth(item: CalcBtn) -> CGFloat {
+        if item == .equal {
+            return ((UIScreen.main.bounds.width - (4*12)))
+        }
+        return (UIScreen.main.bounds.width - (5*12)) / 4
+    }
+
+    func buttonHeight() -> CGFloat {
+        return (UIScreen.main.bounds.width - (5*12)) / 4
+    }
 }
-
-
 
 #Preview {
     ContentView()
