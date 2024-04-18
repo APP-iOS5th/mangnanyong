@@ -4,7 +4,7 @@ import SwiftUI
 struct ContentView: View {
     // 계산기 버튼 목록
     let buttons = [
-        ["AC", "+/-", "%"],
+        ["AC", "%"],
         ["7", "8", "9", "X"],
         ["4", "5", "6", "-"],
         ["1", "2", "3", "+"],
@@ -82,14 +82,14 @@ struct ContentView: View {
     // 계산기 버튼 클릭 핸들러
     func handleButtonPress(_ button: String) {
         switch button {
-        case "C":
-            // "C" 버튼: 화면 초기화
+        case "AC":
+            // "AC" 버튼: 화면 초기화
             display = "0"
             operand1 = ""
             operand2 = ""
             operation = ""
             clearDisplay = true
-        case "X", "-", "+":
+        case "%", "X", "-", "+":
             // 연산자 버튼: 피연산자 설정
             operation = button
             operand1 = display
