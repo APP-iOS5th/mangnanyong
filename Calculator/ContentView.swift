@@ -57,6 +57,7 @@ struct ContentView: View {
     ]
     
     var body: some View {
+     
         VStack {
             List(temp, id: \.self) { temp in
                 
@@ -96,7 +97,7 @@ struct ContentView: View {
     }
     
     func onPress(btn: CalcBtn) {
-
+        print(Operator.add)
         switch btn {
         case .add, .subtract, .multiply, .divide, .equal:
             if btn == .add {
